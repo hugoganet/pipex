@@ -6,7 +6,7 @@
 /*   By: hganet <hganet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 13:42:49 by hganet            #+#    #+#             */
-/*   Updated: 2025/03/31 14:55:57 by hganet           ###   ########.fr       */
+/*   Updated: 2025/03/31 18:16:54 by hganet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ typedef struct s_pipex
 	int		pipefd[2];
 	int		infile;
 	int		outfile;
+	int		infile_opened;
 	pid_t	pid1;
 	pid_t	pid2;
 	char	**argv;

@@ -6,7 +6,7 @@
 /*   By: hganet <hganet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 14:46:23 by hganet            #+#    #+#             */
-/*   Updated: 2025/03/31 15:47:07 by hganet           ###   ########.fr       */
+/*   Updated: 2025/03/31 18:18:39 by hganet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,19 @@ void exec_first_child(t_pipex *px)
 		perror("Fork failed");
 	if (px->pid1 == 0)
 	{
-		dup2(px->infile, STDIN_FILENO); // The process now listen from input.txt
+		if (!px->infile_opened)
+		{
+			int devnull = open("/dev/null", O_RDONLY);
+			if (devnull < 0)
+			{
+				perror("open /dev/null");
+				exit(1);
+			}
+			dup2(devnull, STDIN_FILENO);
+			close(devnull);
+		}
+		else
+			dup2(px->infile, STDIN_FILENO);
 		dup2(px->pipefd[1], STDOUT_FILENO); // The process now write into pipe's WRITE end (pipefd[1])
 		close_fds(px);
 		args = parse_cmd(px->argv[2], px->envp, &cmd_path);

@@ -6,7 +6,7 @@
 /*   By: hganet <hganet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 14:23:48 by hganet            #+#    #+#             */
-/*   Updated: 2025/03/31 14:42:29 by hganet           ###   ########.fr       */
+/*   Updated: 2025/03/31 18:17:44 by hganet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,11 @@ void	init_pipex(t_pipex *px, char **argv, char **envp)
 	px->infile = open(argv[1], O_RDONLY);
 	if (px->infile < 0)
 	{
-		perror("Error opening infile");
-		exit(EXIT_FAILURE);
+		perror(argv[1]);	   // Print file error like the shell
+		px->infile_opened = 0; // Flag to handle fallback
 	}
+	else
+		px->infile_opened = 1;
 	px->outfile = open(argv[4], O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (px->outfile < 0)
 	{
