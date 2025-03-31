@@ -6,7 +6,7 @@
 /*   By: hganet <hganet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 13:52:03 by hganet            #+#    #+#             */
-/*   Updated: 2025/03/31 14:56:25 by hganet           ###   ########.fr       */
+/*   Updated: 2025/03/31 18:31:32 by hganet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,12 @@ void free_split(char **arr)
  */
 void close_fds(t_pipex *px)
 {
-	close(px->infile);
-	close(px->outfile);
-	close(px->pipefd[0]);
-	close(px->pipefd[1]);
+	if (px->pipefd[0] != -1)
+		close(px->pipefd[0]);
+	if (px->pipefd[1] != -1)
+		close(px->pipefd[1]);
+	if (px->infile != -1)
+		close(px->infile);
+	if (px->outfile != -1)
+		close(px->outfile);
 }

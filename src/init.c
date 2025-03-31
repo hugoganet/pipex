@@ -6,7 +6,7 @@
 /*   By: hganet <hganet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 14:23:48 by hganet            #+#    #+#             */
-/*   Updated: 2025/03/31 18:17:44 by hganet           ###   ########.fr       */
+/*   Updated: 2025/03/31 18:33:34 by hganet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,28 +22,36 @@
  * @param argv Program arguments.
  * @param envp Environment variables.
  */
-void	init_pipex(t_pipex *px, char **argv, char **envp)
+void init_pipex(t_pipex *px, char **argv, char **envp)
 {
+	// 1. Initialize all fds to -1 (so close_fds() won't crash if called early)
+	px->infile = -1;
+	px->outfile = -1;
+	px->pipefd[0] = -1;
+	px->pipefd[1] = -1;
+
+	// 2. Save args and env
 	px->argv = argv;
 	px->envp = envp;
+
+	// 3. Try to open infile
 	px->infile = open(argv[1], O_RDONLY);
 	if (px->infile < 0)
 	{
-		perror(argv[1]);	   // Print file error like the shell
-		px->infile_opened = 0; // Flag to handle fallback
+		perror(argv[1]);	   // Shell prints the filename
+		px->infile_opened = 0; // Mark as not opened
 	}
 	else
 		px->infile_opened = 1;
-	px->outfile = open(argv[4], O_CREAT | O_WRONLY | O_TRUNC, 0644);
-	if (px->outfile < 0)
-	{
-		perror("Error opening outfile");
-		close(px->infile);
-		exit(EXIT_FAILURE);
-	}
+
+	// 4. Create the pipe
 	if (pipe(px->pipefd) == -1)
 	{
 		perror("Pipe failed");
+		if (px->infile_opened)
+			close(px->infile); // Close infile if it was opened
 		exit(EXIT_FAILURE);
 	}
+
+	// ✅ outfile will be opened later in exec_second_child()
 }

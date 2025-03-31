@@ -6,7 +6,7 @@
 /*   By: hganet <hganet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 13:53:50 by hganet            #+#    #+#             */
-/*   Updated: 2025/03/31 18:03:03 by hganet           ###   ########.fr       */
+/*   Updated: 2025/03/31 18:21:41 by hganet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ int main(int argc, char **argv, char **envp)
 	if (argc != 5)
 		return (write(2, "Usage: ./pipex file1 cmd1 cmd2 file2\n", 38), 1);
 	init_pipex(&px, argv, envp);
-	printf("input.txt = %i\noutput.txt = %i\n", px.infile, px.outfile);
 	exec_first_child(&px);
 	exec_second_child(&px);
 	close_fds(&px);

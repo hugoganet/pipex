@@ -6,7 +6,7 @@
 /*   By: hganet <hganet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 14:46:23 by hganet            #+#    #+#             */
-/*   Updated: 2025/03/31 18:18:39 by hganet           ###   ########.fr       */
+/*   Updated: 2025/03/31 18:26:10 by hganet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,12 @@ void exec_second_child(t_pipex *px)
 		perror("Fork failed");
 	if (px->pid2 == 0)
 	{
+		px->outfile = open(px->argv[4], O_CREAT | O_WRONLY | O_TRUNC, 0644);
+		if (px->outfile < 0)
+		{
+			perror(px->argv[4]);
+			exit(EXIT_FAILURE);
+		}
 		dup2(px->pipefd[0], STDIN_FILENO);
 		dup2(px->outfile, STDOUT_FILENO);
 		close_fds(px);
