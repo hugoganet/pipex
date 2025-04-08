@@ -6,7 +6,7 @@
 /*   By: hganet <hganet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 13:42:49 by hganet            #+#    #+#             */
-/*   Updated: 2025/04/08 13:24:34 by hganet           ###   ########.fr       */
+/*   Updated: 2025/04/08 14:09:58 by hganet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,18 +24,18 @@
 
 /**
  * @struct t_pipex
- * @brief Struct to store pipex program state and shared variables.
+ * @brief Structure to store pipex program state and shared variables.
  */
 typedef struct s_pipex
 {
-	int		pipefd[2];
-	int		infile;
-	int		outfile;
-	int		infile_opened;
-	pid_t	pid1;
-	pid_t	pid2;
-	char	**argv;
-	char	**envp;
+	int		pipefd[2]; // Pipe file descriptors: [0] for read end, [1] for write end
+	int		infile; // File descriptor for the input file
+	int		outfile; // File descriptor for the output file
+	int		infile_opened; // Flag to indicate if the input file was successfully opened
+	pid_t	pid1; // Process ID for the first child process
+	pid_t	pid2; // Process ID for the second child process
+	char	**argv; // Command line arguments: argv[1] = infile, argv[2] = cmd1, argv[3] = cmd2, argv[4] = outfile
+	char	**envp; // Environment variables passed to execve
 }			t_pipex;
 
 void	init_pipex(t_pipex *px, char **argv, char **envp);

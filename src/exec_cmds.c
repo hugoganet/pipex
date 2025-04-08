@@ -6,7 +6,7 @@
 /*   By: hganet <hganet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 14:46:23 by hganet            #+#    #+#             */
-/*   Updated: 2025/04/08 13:23:53 by hganet           ###   ########.fr       */
+/*   Updated: 2025/04/08 14:49:56 by hganet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,21 +22,22 @@
  */
 static void	handle_infile(t_pipex *px)
 {
-	int	devnull;
+	int	devnull; // File descriptor for /dev/null
 
-	if (!px->infile_opened)
+	if (!px->infile_opened) // If infile was not opened successfully
 	{
+		// Open /dev/null to simulate empty input when the infile doesn't exist.
+		// It's like handing an empty file to the command.
 		devnull = open("/dev/null", O_RDONLY);
-		if (devnull < 0)
 		{
-			perror("open /dev/null");
-			exit(1);
+			perror("open /dev/null"); // Print error message for /dev/null
+			exit(1); // Exit with failure status
 		}
-		dup2(devnull, STDIN_FILENO);
-		close(devnull);
+		dup2(devnull, STDIN_FILENO); // Redirect STDIN to /dev/null
+		close(devnull); // Close the /dev/null file descriptor
 	}
-	else
-		dup2(px->infile, STDIN_FILENO);
+	else // If infile was opened successfully
+		dup2(px->infile, STDIN_FILENO);  // Redirect STDIN to the opened infile
 }
 
 /**
@@ -73,17 +74,22 @@ static void	execute_command(char *cmd_str, char **envp)
 	char	*cmd_path;
 	char	**args;
 
+	// 1 - Get the command path using the provided command string and environment variables
 	args = parse_cmd(cmd_str, envp, &cmd_path);
-	if (!args)
+	if (!args) // If parsing the command fails
 	{
-		perror("Command not found");
-		exit(127);
+		perror("Command not found"); // Print error message for command not found
+		exit(127);					 // Exit with code 127, a standard UNIX shell code for "command not found"
 	}
+	// 2 - Replace current process with the given command using execve.
+	// If it succeeds, it never returns. If it fails, the code below runs.
 	execve(cmd_path, args, envp);
-	perror("execve failed");
-	free(cmd_path);
-	free_split(args);
-	exit(1);
+	// The check "if execve fails" is done implicitly: because if it succeeds, you never return.
+	// If execve fails, it returns -1 and we land here to report the error.
+	perror("execve failed"); // Print error message if execve fails
+	free(cmd_path); // Free the command path memory
+	free_split(args); // Free the arguments array
+	exit(1); // Exit with failure status
 }
 
 /**
@@ -96,15 +102,21 @@ static void	execute_command(char *cmd_str, char **envp)
  */
 void	exec_first_child(t_pipex *px)
 {
-	px->pid1 = fork();
-	if (px->pid1 == -1)
-		perror("Fork failed");
-	if (px->pid1 == 0)
+	// 1 - Fork a new process for the first command
+	px->pid1 = fork(); 
+	if (px->pid1 == -1) // Check for fork error
+		perror("Fork failed"); // Print error message if fork fails
+	if (px->pid1 == 0) // If in the child process
 	{
+		// 2 - If infile was opened successfully, redirect it to STDIN,
+		// 	   otherwise redirect STDIN to /dev/null to simulate an empty file and avoid errors
 		handle_infile(px);
+		// 3 - Redirect stdout to the pipe's write end, so cmd1 sends output into the pipe.
 		dup2(px->pipefd[1], STDOUT_FILENO);
+		// 4 - // Close all file descriptors: avoids leaks and prevents blocking behavior in pipes.
 		close_fds(px);
-		execute_command(px->argv[2], px->envp);
+		// 5 - Execute the first command
+		execute_command(px->argv[2], px->envp); 
 	}
 }
 
@@ -118,14 +130,19 @@ void	exec_first_child(t_pipex *px)
  */
 void	exec_second_child(t_pipex *px)
 {
+	// 1 - Fork a new process for the second command
 	px->pid2 = fork();
-	if (px->pid2 == -1)
-		perror("Fork failed");
+	if (px->pid2 == -1) // Check for fork error
+		perror("Fork failed"); // Print error message if fork fails
 	if (px->pid2 == 0)
 	{
+		// 2 - Replace the terminal (STDIN) with the pipe’s read end.
 		dup2(px->pipefd[0], STDIN_FILENO);
+		// 3 - Close the pipe write end and the infile file descriptor
 		handle_outfile(px);
+		// 4 - Close all file descriptors to avoid leaks
 		close_fds(px);
+		// 5 - Execute the second command
 		execute_command(px->argv[3], px->envp);
 	}
 }

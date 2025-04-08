@@ -6,7 +6,7 @@
 /*   By: hganet <hganet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 13:52:03 by hganet            #+#    #+#             */
-/*   Updated: 2025/04/08 10:27:54 by hganet           ###   ########.fr       */
+/*   Updated: 2025/04/08 14:12:04 by hganet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,12 @@ void	free_split(char **arr)
  */
 void	close_fds(t_pipex *px)
 {
-	if (px->pipefd[0] != -1)
+	if (px->pipefd[0] != -1) // Check if the read end of the pipe is open
 		close(px->pipefd[0]);
-	if (px->pipefd[1] != -1)
+	if (px->pipefd[1] != -1) // Check if the write end of the pipe is open
 		close(px->pipefd[1]);
-	if (px->infile != -1)
+	if (px->infile != -1) // Check if the input file is open
 		close(px->infile);
-	if (px->outfile != -1)
+	if (px->outfile != -1) // Check if the output file is open
 		close(px->outfile);
 }
