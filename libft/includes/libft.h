@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
+/*   By: hganet <hganet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 12:13:10 by hganet            #+#    #+#             */
-/*   Updated: 2025/02/27 15:46:42 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/04/08 10:08:21 by hganet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include<string.h>
 # include<limits.h>
 # include<stdint.h>
-#include <stdarg.h>
+# include <stdarg.h>
 
 void	ft_bzero(void *s, size_t n);
 void	*ft_calloc(size_t nmemb, size_t size);
@@ -56,5 +56,5 @@ void	ft_putnbr_fd(int n, int fd);
 int		ft_tolower(int c);
 int		ft_toupper(int c);
 int		ft_check_base(char *base);
-int 	ft_printf(const char *format, ...);
+int		ft_printf(const char *format, ...);
 #endif

@@ -3,22 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlcat.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
+/*   By: hganet <hganet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 10:16:47 by hganet            #+#    #+#             */
-/*   Updated: 2025/02/27 15:43:20 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/04/08 10:10:33 by hganet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-
-/* static int	min(int n1, int n2)
-{
-	if (n1 <= n2)
-		return (n1);
-	else
-		return (n2);
-} */
 
 /**
  * @brief Appends the NUL-terminated string src to the end of dst.
@@ -51,5 +43,5 @@ size_t	ft_strlcat(char *dst, const char *src, size_t siz)
 	if (dst_i_len < siz)
 		return (ft_strlen(src) + dst_i_len);
 	else
-		return (ft_strlen(src) + siz);  
+		return (ft_strlen(src) + siz);
 }

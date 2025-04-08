@@ -3,23 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hugoganet <hugoganet@student.42.fr>        +#+  +:+       +#+        */
+/*   By: hganet <hganet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 17:45:37 by hganet            #+#    #+#             */
-/*   Updated: 2025/02/27 15:52:58 by hugoganet        ###   ########.fr       */
+/*   Updated: 2025/04/08 10:10:09 by hganet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include "libft.h"
 
-int ft_putstr_len_fd(char *str, int fd);
-int ft_putnbr_len_fd(int n, int fd);
-int ft_putunbr_len_fd(unsigned int n, int fd);
-int ft_putnbr_base_len_fd(unsigned int n, char *base, int fd);
-int handle_pointer_format(uintptr_t ptr, int fd);
+int	ft_putstr_len_fd(char *str, int fd);
+int	ft_putnbr_len_fd(int n, int fd);
+int	ft_putunbr_len_fd(unsigned int n, int fd);
+int	ft_putnbr_base_len_fd(unsigned int n, char *base, int fd);
+int	handle_pointer_format(uintptr_t ptr, int fd);
 
-void process_arg(char format, va_list args, int *len)
+void	process_arg(char format, va_list args, int *len)
 {
 	if (format == 'c')
 	{
@@ -45,19 +45,21 @@ void process_arg(char format, va_list args, int *len)
 		*len += ft_putnbr_base_len_fd(va_arg(args, int), "0123456789ABCDEF", 1);
 }
 
-int is_valid_format(char c)
+int	is_valid_format(char c)
 {
 	if ((
-			c == 'c' || c == 's' || c == 'd' || c == 'i' || c == 'p' || c == 'u' || c == 'x' || c == 'X' || c == '%'))
+			c == 'c' || c == 's' || c == 'd'
+			|| c == 'i' || c == 'p' || c == 'u'
+			|| c == 'x' || c == 'X' || c == '%'))
 		return (1);
 	return (0);
 }
 
-int ft_printf(const char *format, ...)
+int	ft_printf(const char *format, ...)
 {
-	int i;
-	int len;
-	va_list args;
+	int		i;
+	int		len;
+	va_list	args;
 
 	va_start(args, format);
 	len = 0;
