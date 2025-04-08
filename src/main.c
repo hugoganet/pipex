@@ -6,7 +6,7 @@
 /*   By: hganet <hganet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 13:53:50 by hganet            #+#    #+#             */
-/*   Updated: 2025/03/31 18:21:41 by hganet           ###   ########.fr       */
+/*   Updated: 2025/04/08 13:24:11 by hganet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@
  * @param envp Environment variables passed to execve.
  * @return int Exit status code.
  */
-int main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv, char **envp)
 {
-	t_pipex px;
+	t_pipex	px;
 	int		status;
 
 	if (argc != 5)
@@ -34,14 +34,10 @@ int main(int argc, char **argv, char **envp)
 	exec_first_child(&px);
 	exec_second_child(&px);
 	close_fds(&px);
-
-	// Wait for both children to finish
-	waitpid(px.pid1, NULL, 0);	  // First child
-	waitpid(px.pid2, &status, 0); // Second child
-
-	// If second command ran and exited normally, return its status
+	waitpid(px.pid1, NULL, 0);
+	waitpid(px.pid2, &status, 0);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	else
-		return (1); // If something else happened (signal, etc)
+		return (1);
 }

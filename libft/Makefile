@@ -41,7 +41,6 @@ SRC = ft_isalpha.c \
 			ft_printf.c \
 			process_args.c \
 			get_next_line.c \
-			get_next_line_utils.c \
 
 # Full path to the source files
 SRCS := $(addprefix $(SRC_DIR)/, $(SRC))

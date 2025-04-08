@@ -6,21 +6,21 @@
 /*   By: hganet <hganet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 13:42:49 by hganet            #+#    #+#             */
-/*   Updated: 2025/03/31 18:16:54 by hganet           ###   ########.fr       */
+/*   Updated: 2025/04/08 13:24:34 by hganet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PIPEX_H
 # define PIPEX_H
 
-#include <stdio.h>	   // for printf, perror
-#include <stdlib.h>	   // for exit
-#include <unistd.h>	   // fork, pipe, dup2, execve
-#include <sys/types.h> // for pid_t
-#include <fcntl.h>	   // for O_RDONLY, O_CREAT, O_WRONLY, O_TRUNC
-#include <sys/wait.h>  // waitpid
-#include <stddef.h>	   // NULL
-#include "libft.h"
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <sys/types.h>
+# include <fcntl.h>
+# include <sys/wait.h>
+# include <stddef.h>
+# include "libft.h"
 
 /**
  * @struct t_pipex
@@ -38,12 +38,12 @@ typedef struct s_pipex
 	char	**envp;
 }			t_pipex;
 
-void init_pipex(t_pipex *px, char **argv, char **envp);
-void exec_first_child(t_pipex *px);
-void exec_second_child(t_pipex *px);
-void close_fds(t_pipex *px);
-void free_split(char **arr);
-char **parse_cmd(char *cmd_str, char **envp, char **cmd_path_out);
-char *get_cmd_path(char *cmd, char **envp);
+void	init_pipex(t_pipex *px, char **argv, char **envp);
+void	exec_first_child(t_pipex *px);
+void	exec_second_child(t_pipex *px);
+void	close_fds(t_pipex *px);
+void	free_split(char **arr);
+char	**parse_cmd(char *cmd_str, char **envp, char **cmd_path_out);
+char	*get_cmd_path(char *cmd, char **envp);
 
 #endif

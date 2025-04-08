@@ -7,7 +7,7 @@ LIBFT_DIR	= ./libft
 
 # Compiler & Flags
 CC			= cc
-CFLAGS		= -Wall -Wextra -Werror -Iinclude -I$(LIBFT_DIR)/includes
+CFLAGS		= -Wall -Wextra -Werror -Iinclude -I$(LIBFT_DIR)/includes -g
 
 SRC_FILES	= main.c \
 			  exec_cmds.c \

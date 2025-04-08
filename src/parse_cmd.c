@@ -6,7 +6,7 @@
 /*   By: hganet <hganet@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 13:16:13 by hganet            #+#    #+#             */
-/*   Updated: 2025/03/31 16:26:46 by hganet           ###   ########.fr       */
+/*   Updated: 2025/04/08 13:22:55 by hganet           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,24 +19,22 @@
  * @param envp Environment variables array.
  * @return char* Path to the executable, or NULL if not found.
  */
-char *get_cmd_path(char *cmd, char **envp)
+char	*get_cmd_path(char *cmd, char **envp)
 {
-	char **paths;
-	char *full_path;
-	char *joined;
-	int i;
+	char	**paths;
+	char	*full_path;
+	char	*joined;
+	int		i;
 
 	i = 0;
 	while (envp[i] && ft_strncmp(envp[i], "PATH=", 5) != 0)
 		i++;
-	fprintf(stderr, "PATH found: %s\n", envp[i]);
 	if (!envp[i])
 		return (NULL);
 	paths = ft_split(envp[i] + 5, ':');
 	i = 0;
 	while (paths[i])
 	{
-		fprintf(stderr, "Trying: %s/%s\n", paths[i], cmd);
 		joined = ft_strjoin(paths[i], "/");
 		full_path = ft_strjoin(joined, cmd);
 		free(joined);
@@ -57,15 +55,21 @@ char *get_cmd_path(char *cmd, char **envp)
  * @param cmd_path_out Output pointer for the resolved command path.
  * @return char** Parsed arguments for execve (NULL-terminated).
  */
-char **parse_cmd(char *cmd_str, char **envp, char **cmd_path_out)
+char	**parse_cmd(char *cmd_str, char **envp, char **cmd_path_out)
 {
-	char **args;
+	char	**args;
 
 	args = ft_split(cmd_str, ' ');
 	if (!args || !args[0])
+	{
+		free_split(args);
 		return (NULL);
-	fprintf(stderr, "Resolving command: %s\n", args[0]);
+	}
 	*cmd_path_out = get_cmd_path(args[0], envp);
-	fprintf(stderr, "Resolved path: %s\n", *cmd_path_out);
+	if (!*cmd_path_out)
+	{
+		free_split(args);
+		return (NULL);
+	}
 	return (args);
 }
